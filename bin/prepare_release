@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+yardoc --format=markdown
+bin/generate_llm.rb
+gem build

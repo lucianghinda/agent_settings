@@ -1,0 +1,13 @@
+--markup markdown
+--format markdown
+--output-dir doc
+--title "AgentSettings"
+--protected
+--no-private
+--plugin markdown
+lib/**/*.rb
+-
+README.md
+CHANGELOG.md
+LICENSE
+doc/ruby.md
