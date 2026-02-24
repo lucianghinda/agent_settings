@@ -6,6 +6,21 @@ This gem provides a clean interface to find where agent configuration files
 are located, whether they exist, and which one is currently effective based on
 precedence rules and environment variable overrides.
 
+## Trusted vs Untrusted Projects
+
+The `trusted` parameter controls whether project-level config is included in
+resolution. This is a security feature for Codex:
+
+*   **Trusted projects** (`trusted: true`): Project config is included in
+    resolution. Use this for projects you own or have reviewed.
+*   **Untrusted projects** (`trusted: false`): Project config is ignored for
+    Codex. This prevents untrusted code repositories from injecting malicious
+    configuration. A warning is added if a <code>.codex/config.toml</code>
+    file exists but is ignored.
+
+Claude Code and OpenCode do not use the trust model - their project configs
+are always included regardless of the `trusted` parameter.
+
 **@example Get global config location**
 ```ruby
 location = AgentSettings.global(:claude)
@@ -26,6 +41,13 @@ results = AgentSettings.all(dir: Dir.pwd)
 results.each do |agent, config_path|
   puts "#{agent}: #{config_path.effective.path}"
 end
+```
+
+**@example Untrusted project (Codex ignores project config)**
+```ruby
+result = AgentSettings.resolve(:codex, dir: "/untrusted/repo", trusted: false)
+result.project   #=> nil (ignored for security)
+result.warnings  #=> ["Project config ignored for untrusted project"]
 ```
 
 ## Constants
@@ -74,8 +96,12 @@ location.exists? #=> true
 Get the project-level config location for an agent.
 
 Project configs are stored within the project directory and apply only to that
-specific project. Note that Codex ignores project config for untrusted
-projects.
+specific project.
+
+Note: For Codex, project config is ignored when `trusted: false`. This is a
+security measure to prevent untrusted repositories from injecting malicious
+configuration. In this case, returns nil and a warning is added to the resolve
+result.
 - **@param** `agent` [Symbol] the agent identifier (:claude, :opencode, :codex)
 - **@param** `dir` [String] project directory path (required)
 - **@param** `env` [Hash] environment variables hash (default: ENV)

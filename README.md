@@ -2,7 +2,7 @@
 
 Discover config locations for Claude Code, OpenCode, and Codex
 
-If you are an LLM/AI Agent read [./llm.txt](llm.txt) in this repository. 
+If you are an LLM/AI Agent read [./llm.md](llm.md) in this repository. 
 
 ## Installation
 

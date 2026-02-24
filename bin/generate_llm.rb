@@ -6,7 +6,7 @@ require "fileutils"
 repo_root = File.expand_path("..", __dir__)
 doc_dir = File.join(repo_root, "doc")
 main_path = File.join(doc_dir, "AgentSettings.md")
-llm_path = File.join(repo_root, "llm.txt")
+llm_path = File.join(repo_root, "llm.md")
 
 unless File.exist?(main_path)
   warn "Missing #{main_path}"
